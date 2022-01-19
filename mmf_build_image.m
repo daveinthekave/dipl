@@ -1,4 +1,4 @@
-function [Image_data] = mmf_build_image(number_of_modes, image_size, number_of_data, complex_weights_vector)
+function [image_data] = mmf_build_image(number_of_modes, image_size, number_of_data, complex_weights_vector)
 %% load complex mode distribution
 % load the complex distrbutions
 if number_of_modes == 5
@@ -13,7 +13,7 @@ end
 %% create images
 % define a variable for Image data with dimension (image size, image size, 1, n)
 fprintf("Start to generate the mode distribution......\n");
-Image_data = zeros(image_size, image_size, 1, number_of_data);
+image_data = zeros(image_size, image_size, 1, number_of_data);
 for index_number = 1:number_of_data
     % 1. define a variable for single image with resolution (image size,image size)
     weights = complex_weights_vector(:, index_number);
@@ -25,7 +25,7 @@ for index_number = 1:number_of_data
     % 4. normalization the amplitude distribution to (0,1)
     %    using normalization(image, minValue, maxValue)
     norm_field = normalization(abs(cplx_field), 0, 1);
-    Image_data(:, :, 1, index_number) = norm_field;   
+    image_data(:, :, 1, index_number) = norm_field;   
     
 end
 fprintf("The image data has been generated.\n");

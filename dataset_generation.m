@@ -29,8 +29,8 @@ labels = [amp_ws; norm_phs_ws];
 
 % 6. split complex mode weights vector and label vector into Training,
 % validation and test set. 
-train_labels = labels(:, 1:split);
-test_labels = labels(:, split+1:end);
+train_labels = labels(:, 1:split)';
+test_labels = labels(:, split+1:end)';
 
 %% create image data - Aufgabe 2 
 % use function mmf_build_image()
