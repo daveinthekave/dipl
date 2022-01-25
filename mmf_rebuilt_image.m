@@ -23,12 +23,12 @@ end
 
 image_size = size(mmf_modes, 1);
 
-number_of_test_images = size(pred_vectors,1);
+number_of_test_images = size(pred_vectors, 1);
 ground_truth = squeeze(ground_truth);
 
 %% read mode weights from predicted vectors
 % read amplitude weigths
-amplitude_vector = pred_vectors(:,1:number_of_modes);
+amplitude_vector = pred_vectors(:, 1:number_of_modes);
 % read cos(phase) 
 phase_vector = pred_vectors(:,(number_of_modes+1):(2*number_of_modes-1));
 % normalization cos(phase) to (-1,1)
@@ -36,26 +36,26 @@ phase_vector = normalization(phase_vector, -1, 1);
 % calculate phase through arccos()
 phase_vector = acos(phase_vector);
 % add phase weight of the first mode 
-phi = [zeros(number_of_test_images,1) phase_vector];
+phi = [zeros(number_of_test_images, 1) phase_vector];
 
 %% rebuilt phase vector
 % define a varibale for complex vectors
-complex_vector_N  = zeros(number_of_test_images,number_of_modes);
+complex_vector_N  = zeros(number_of_test_images, number_of_modes);
 
 for i = 1:number_of_test_images
     % read phase weights and generate all possible combinations 
-    phi_vectors = phi(i,:).* phase_weight;
-    complex_vector_n = zeros(size(phi_vectors,1),number_of_modes);
+    phi_vectors = phi(i, :) .* phase_weight;
+    complex_vector_n = zeros(size(phi_vectors, 1), number_of_modes);
     % read the ground truth
-    ground_truth_i = ground_truth(:,:,i); 
-    correlation_n = zeros(size(phi_vectors,1),1);
+    ground_truth_i = ground_truth(:, :, i); 
+    correlation_n = zeros(size(phi_vectors, 1), 1);
     
     % reconstruct all possible field distribution
-    for j = 1:size(phi_vectors,1)
-        complex_vector = amplitude_vector(i,:) .*exp(1i* phi_vectors(j,:)); %                
+    for j = 1:size(phi_vectors, 1)
+        complex_vector = amplitude_vector(i, :) .*exp(1i* phi_vectors(j, :)); %                
         
         % 2. generation of complex field distribution
-        template = sum(mmf_modes .* shiftdim(complex_vector', -2), 3);    
+        template = sum(mmf_modes .* shiftdim(rot90(complex_vector, 3), -2), 3);    
         
         % calculate the correlation coefficient between reconstrion and ground
         % truth
@@ -68,7 +68,7 @@ for i = 1:number_of_test_images
     if numel(posx) > 1
         posx = posx(1);
     end
-    complex_vector_N(i,:) = complex_vector_n(posx,:);
+    complex_vector_N(i, :) = complex_vector_n(posx,:);
 end
 
 %% rebuilt the distribution(complex) 

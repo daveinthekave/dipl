@@ -16,10 +16,10 @@ fprintf("Start to generate the mode distribution......\n");
 image_data = zeros(image_size, image_size, 1, number_of_data);
 for index_number = 1:number_of_data
     % 1. define a variable for single image with resolution (image size,image size)
-    weights = complex_weights_vector(:, index_number);
+    weights = complex_weights_vector(index_number, :);
     
     % 2. generation of complex field distribution 
-    cplx_field = sum(mmf_5modes_32 .* shiftdim(weights, -2), 3);
+    cplx_field = sum(mmf_5modes_32 .* shiftdim(rot90(weights, 3), -2), 3);
     
     % 3. abstract Amplitude distribution 
     % 4. normalization the amplitude distribution to (0,1)

@@ -62,7 +62,7 @@ options.ValidationData = {x_val, y_val};
 preds = predict(trainedNet, test_imgs);
 
 % reconstruct field distribution
-rebuild_imgs = mmf_rebuilt_image(preds, test_labels, ceil(size(y_train, 2) / 2));
+rebuild_imgs = mmf_rebuilt_image(preds, test_imgs, ceil(size(y_train, 2) / 2));
 
 %%  Visualization results  - Aufgabe 5
 % calculate Correlation between the ground truth and reconstruction
