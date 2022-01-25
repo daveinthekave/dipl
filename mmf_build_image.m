@@ -21,11 +21,13 @@ for index_number = 1:number_of_data
     % 2. generation of complex field distribution 
     cplx_field = sum(mmf_5modes_32 .* shiftdim(rot90(weights, 3), -2), 3);
     
-    % 3. abstract Amplitude distribution 
+    % 3. abstract Amplitude distribution    
     % 4. normalization the amplitude distribution to (0,1)
     %    using normalization(image, minValue, maxValue)
-    norm_field = normalization(abs(cplx_field), 0, 1);
-    image_data(:, :, 1, index_number) = norm_field;   
+    norm_amp = normalization(abs(cplx_field), 0, 1);
+    
+    norm_cplx_field = norm_amp .* exp(1i*angle(cplx_field));
+    image_data(:, :, 1, index_number) = norm_cplx_field;   
     
 end
 fprintf("The image data has been generated.\n");

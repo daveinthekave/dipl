@@ -34,7 +34,8 @@ test_labels = labels(:, split+1:end)';
 
 %% create image data - Aufgabe 2 
 % use function mmf_build_image()
-images = mmf_build_image(number_of_modes, image_size, number_of_data, cplx_ws);
+cplx_images = mmf_build_image(number_of_modes, image_size, number_of_data, cplx_ws);
+images = abs(cplx_images);
 
 %% save dataset
 train_imgs = images(:, :, 1, 1:split);
