@@ -7,11 +7,30 @@ close all
 
 %  2. define the input and output size for neural network
 
+height = 32;
+width = 32;
+channels = 1;
 
 %% create VGG neural network - Aufgabe 7
-% Layers_VGG= [];
-% use command dlnetwork()
+inputSize = [height width channels];
 
+Layers_VGG = [imageInputLayer(inputSize)];
+for i = 1:3
+    Layers_VGG = [
+        Layers_VGG
+        % ein Block
+        convolution2dLayer(3, 64, 'name', "conv1_1", "Padding", "same")
+        reluLayer('Name', "relu1_1")
+        convolution2dLayer(3, 64, 'Name', "conv1_2", "Padding", "same")
+        reluLayer('Name', "relu1_2")
+        maxPooling2dLayer(2, "Stride", 2, 'Name', "pooling1")
+    ]
+end
+fullyConnectedLayer(256, 'Name', "fc1")
+fullyConnectedLayer(128, 'Name', "fc2")
+fullyConnectedLayer(output_size, 'Name', "fc_output")
+
+% use command dlnetwork()
 dlnet = dlnetwork(Layers_VGG);
 
 %% learnable parameters transfer  - Aufgabe 8 
@@ -32,7 +51,7 @@ plots = "training-progress";
 % Train Network
 if plots == "training-progress"
     figure
-    lineLossTrain = animatedline('Color',[0.85 0.325 0.098]);
+    lineLossTrain = animatedline('Color', [0.85 0.325 0.098]);
     ylim([0 inf])
     xlabel("Iteration")
     ylabel("Loss")
