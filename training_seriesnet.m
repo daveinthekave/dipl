@@ -38,6 +38,11 @@ Layers_VGG= [
     convolution2dLayer(3, 64, "Padding", "same")
     reluLayer
     maxPooling2dLayer(2, "Stride", 2)
+    convolution2dLayer(3, 128, "Padding", "same")
+    reluLayer
+    convolution2dLayer(3, 128, "Padding", "same")
+    reluLayer
+    maxPooling2dLayer(2, "Stride", 2)
     fullyConnectedLayer(output_size, 'Name', 'Output')
     regressionLayer()
 ];
@@ -89,6 +94,23 @@ line([1 size(corr_vals, 1)], [corr_mean corr_mean]);
 figure; boxplot(corr_vals);
 figure; histogram(corr_vals);
 
+[B, I] = sort(corr_vals);
+figure;
+for i = 1:4
+    subplot(2,2,i);
+    if mod(i, 2) == 1
+        imagesc(abs(vis_test_imgs(:, :, I(i))));title('Ground Truth');axis image;
+    else
+        imagesc(abs(vis_rebuild_imgs(:, :, I(i))));axis image;
+        title(sprintf('NN Prediction, Corr: %f', B(i)));
+    end
+end
+figure;subplot(1,2,1);
+imagesc(abs(vis_test_imgs(:, :, I(end))));title('Ground Truth');axis image;
+subplot(1,2,2);
+imagesc(abs(vis_rebuild_imgs(:, :, I(end))));axis image;
+title(sprintf('NN Prediction, Corr: %f', B(end)));
+
 % calulate relative error of ampplitude and phase 
 rel_cplx_err = vis_rebuild_imgs ./ vis_test_imgs;
 rel_amp_err = abs(rel_cplx_err);
@@ -96,8 +118,8 @@ rel_phs_err = angle(rel_cplx_err);
 
 mean_amp_err = mean(rel_amp_err, 3);
 mean_phs_err = mean(rel_phs_err, 3);
-figure;imagesc(mean_amp_err);title('Mean relative amp error');
-figure;imagesc(mean_phs_err);title('Mean relative phs error');
+figure;imagesc(mean_amp_err);title('Mean relative amp error');axis image;
+figure;imagesc(mean_phs_err);title('Mean relative phs error');axis image;
 
 %% save model
 clear train_imgs test_imgs train_labels test_labels
