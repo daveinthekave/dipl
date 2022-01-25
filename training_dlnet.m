@@ -12,7 +12,7 @@ close all
 % Layers_VGG= [];
 % use command dlnetwork()
 
-
+dlnet = dlnetwork(Layers_VGG);
 
 %% learnable parameters transfer  - Aufgabe 8 
 % use Transfer Learning
@@ -44,7 +44,8 @@ iteration = 0;
 averageGrad = [];
 averageSqGrad = [];
 for epoch = 1:numEpochs
-    
+    dlX= dlarray(single(X));
+    Y = single(labels);
     for i = 1:numIterationsPerEpoch
         iteration = iteration + 1;
         
