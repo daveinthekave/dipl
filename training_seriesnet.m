@@ -18,30 +18,30 @@ input_size = size(train_imgs, 1, 2, 3);
 output_size = size(train_labels, 2);
 
 %% create MLP neural network - Aufgabe 3
-Layers_MLP = [
-    imageInputLayer(input_size)    
-    fullyConnectedLayer(prod(input_size))
-    reluLayer()
-    fullyConnectedLayer(prod(input_size))
-    reluLayer()
-    fullyConnectedLayer(output_size, 'Name', 'Output')
-    regressionLayer()
-];
-% analyzeNetwork(Layers_MLP)
-
-%% create VGG neural network - Aufgabe 6
-% Layers_VGG= [
-%     imageInputLayer(input_size)
-%     % first block
-%     convolution2dLayer(3, 64, "Padding", "same")
-%     reluLayer
-%     convolution2dLayer(3, 64, "Padding", "same")
-%     reluLayer
-%     maxPooling2dLayer(2, "Stride", 2)
+% Layers_MLP = [
+%     imageInputLayer(input_size)    
+%     fullyConnectedLayer(prod(input_size))
+%     reluLayer()
+%     fullyConnectedLayer(prod(input_size))
+%     reluLayer()
 %     fullyConnectedLayer(output_size, 'Name', 'Output')
 %     regressionLayer()
 % ];
-% analyzeNetwork(Layers_VGG)
+% analyzeNetwork(Layers_MLP)
+
+%% create VGG neural network - Aufgabe 6
+Layers_VGG= [
+    imageInputLayer(input_size)
+    % first block
+    convolution2dLayer(3, 64, "Padding", "same")
+    reluLayer
+    convolution2dLayer(3, 64, "Padding", "same")
+    reluLayer
+    maxPooling2dLayer(2, "Stride", 2)
+    fullyConnectedLayer(output_size, 'Name', 'Output')
+    regressionLayer()
+];
+analyzeNetwork(Layers_VGG)
 
 %% Training network
 % define "trainingOptions"
@@ -55,7 +55,13 @@ options.ValidationData = {x_val, y_val};
 % options.Plots = 'training-progress';
 
 % training using "trainNetwork"
-[trainedNet, info] = trainNetwork(x_train, y_train, Layers_MLP, options);
+[trainedNet, info] = trainNetwork(x_train, y_train, Layers_VGG, options);
+ids = 0:50:size(info.ValidationRMSE, 2);
+ids(1) = 1;
+figure;plot(info.TrainingRMSE);hold on;plot(ids, info.ValidationRMSE(ids));
+title('RMSE'); legend('training', 'validation'); xlabel('Minibatch');
+figure;plot(info.TrainingLoss);hold on;plot(ids, info.ValidationLoss(ids));
+title('Loss'); legend('training', 'validation'); xlabel('Minibatch');
 
 %% Test Network  - Aufgabe 4
 % use command "predict"
