@@ -23,6 +23,7 @@ end
 image_size = size(mmf_modes, 1);
 number_of_test_images = size(pred_vectors,1);
 ground_truth = squeeze(ground_truth);
+
 %% read mode weights from predicted vectors
 % read amplitude weigths
 amplitude_vector = pred_vectors(:,1:number_of_modes);
